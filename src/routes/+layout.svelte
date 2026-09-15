@@ -18,6 +18,26 @@
 		en: 'English',
 		fr: 'Français'
 	};
+
+	// Route ids are language-independent (the locale prefix is rerouted away in hooks.ts).
+	const routeId = $derived(page.route.id ?? '');
+	const inSpots = $derived(routeId.startsWith('/spots'));
+	const sections = $derived([
+		{
+			path: '/',
+			emoji: '🎁',
+			text: m.nav_finds(),
+			current: !inSpots,
+			exact: routeId === '/'
+		},
+		{
+			path: '/spots',
+			emoji: '🔥',
+			text: m.nav_spots(),
+			current: inSpots,
+			exact: routeId === '/spots'
+		}
+	]);
 </script>
 
 <svelte:head>
@@ -59,12 +79,33 @@
 			<img src={logo} alt="" width="44" height="44" class="size-11 rounded-full" />
 			{m.app_name()}
 		</a>
-		<a href={href('/new')} class="btn btn-accent">
+		<a href={href(inSpots ? '/spots/new' : '/new')} class="btn btn-accent">
 			<span aria-hidden="true">➕</span>
-			{m.nav_add()}
+			{inSpots ? m.nav_add_spot() : m.nav_add()}
 		</a>
 	</div>
 </header>
+
+<nav aria-label={m.nav_main_label()} class="border-b-2 border-brand-100 bg-brand-50">
+	<!-- Two equal columns so both sections fit side by side on a narrow phone. -->
+	<ul class="mx-auto my-0 grid max-w-3xl list-none grid-cols-2 gap-2 px-4 py-2 sm:flex">
+		{#each sections as section (section.path)}
+			<li>
+				<a
+					href={href(section.path)}
+					aria-current={section.current ? (section.exact ? 'page' : 'true') : undefined}
+					class="btn w-full gap-1 px-2 text-base sm:gap-2 sm:px-5 sm:text-lg {section.current
+						? 'btn-primary'
+						: 'btn-secondary'}"
+				>
+					<!-- Decorative; dropped on narrow phones so both labels stay on one line. -->
+					<span aria-hidden="true" class="hidden min-[400px]:inline">{section.emoji}</span>
+					{section.text}
+				</a>
+			</li>
+		{/each}
+	</ul>
+</nav>
 
 <main id="main" tabindex="-1" class="mx-auto max-w-3xl px-4 py-5 focus:outline-none">
 	{@render children()}

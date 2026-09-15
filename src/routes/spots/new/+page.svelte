@@ -4,7 +4,6 @@
 	import ErrorSummary from '$lib/components/ErrorSummary.svelte';
 	import LocationField from '$lib/components/LocationField.svelte';
 	import { CATEGORIES } from '$lib/domain';
-	import { href } from '$lib/i18n';
 	import { fieldErrorMessage } from '$lib/labels';
 	import { DESCRIPTION_MAX, HINT_MAX, type FieldError } from '$lib/listing-validation';
 	import { m } from '$lib/paraglide/messages.js';
@@ -21,7 +20,7 @@
 				['category', `category-${CATEGORIES[0]}`],
 				['location', 'use-location'],
 				['description', 'description'],
-				['locationHint', 'locationHint']
+				['whenHint', 'whenHint']
 			] as const
 		).flatMap(([field, target]) => {
 			const error: FieldError | undefined = errors[field];
@@ -31,20 +30,16 @@
 </script>
 
 <svelte:head>
-	<title>{m.new_title()} · {m.app_name()}</title>
+	<title>{m.nav_add_spot()} · {m.app_name()}</title>
 </svelte:head>
 
-<h1 class="mb-1 text-3xl font-bold">{m.new_title()}</h1>
-<p class="mt-0 mb-2 text-lg">{m.new_intro()}</p>
-<p class="mt-0 mb-5">
-	{m.new_spot_suggest()}
-	<a href={href('/spots/new')}>{m.nav_add_spot()}</a>
-</p>
+<h1 class="mb-1 text-3xl font-bold">{m.nav_add_spot()}</h1>
+<p class="mt-0 mb-5 text-lg">{m.spot_new_intro()}</p>
 
 <ErrorSummary
 	result={form}
 	items={summaryItems}
-	rateLimitedMessage={form?.rateLimited ? m.error_rate_limited() : null}
+	rateLimitedMessage={form?.rateLimited ? m.spot_error_rate_limited() : null}
 />
 
 <form
@@ -59,21 +54,21 @@
 	}}
 >
 	<CategoryField
-		legend="1. {m.field_category()}"
+		legend="1. {m.spot_field_category()}"
 		error={errors.category}
 		selected={form?.values?.category}
 	/>
 
 	<LocationField
-		legend="2. {m.field_location()}"
-		mapLabel={m.picker_map_label()}
+		legend="2. {m.spot_field_location()}"
+		mapLabel={m.spot_picker_map_label()}
 		error={errors.location}
 	/>
 
 	<div class="flex flex-col gap-1">
-		<label for="description" class="text-2xl font-bold">3. {m.field_description()}</label>
+		<label for="description" class="text-2xl font-bold">3. {m.spot_field_description()}</label>
 		<p id="description-hint" class="m-0 text-neutral-700">
-			{m.field_description_hint({ max: DESCRIPTION_MAX })}
+			{m.spot_field_description_hint({ max: DESCRIPTION_MAX })}
 		</p>
 		{#if errors.description}
 			<p id="description-error" class="field-error m-0">{fieldErrorMessage(errors.description)}</p>
@@ -92,28 +87,24 @@
 	</div>
 
 	<div class="flex flex-col gap-1">
-		<label for="locationHint" class="text-xl font-bold">{m.field_hint()}</label>
-		<p id="locationHint-hint" class="m-0 text-neutral-700">{m.field_hint_hint()}</p>
-		{#if errors.locationHint}
-			<p id="locationHint-error" class="field-error m-0">
-				{fieldErrorMessage(errors.locationHint)}
-			</p>
+		<label for="whenHint" class="text-xl font-bold">{m.spot_field_when()}</label>
+		<p id="whenHint-hint" class="m-0 text-neutral-700">{m.spot_field_when_hint()}</p>
+		{#if errors.whenHint}
+			<p id="whenHint-error" class="field-error m-0">{fieldErrorMessage(errors.whenHint)}</p>
 		{/if}
 		<input
 			type="text"
-			id="locationHint"
-			name="locationHint"
+			id="whenHint"
+			name="whenHint"
 			maxlength={HINT_MAX}
-			aria-invalid={errors.locationHint ? 'true' : undefined}
-			aria-describedby={errors.locationHint
-				? 'locationHint-error locationHint-hint'
-				: 'locationHint-hint'}
+			aria-invalid={errors.whenHint ? 'true' : undefined}
+			aria-describedby={errors.whenHint ? 'whenHint-error whenHint-hint' : 'whenHint-hint'}
 			class="min-h-12 rounded-lg border-2 border-neutral-500 text-lg"
-			value={form?.values?.locationHint ?? ''}
+			value={form?.values?.whenHint ?? ''}
 		/>
 	</div>
 
 	<button type="submit" class="btn btn-accent w-full text-xl" aria-disabled={submitting}>
-		{submitting ? m.submitting() : m.submit_listing()}
+		{submitting ? m.submitting() : m.spot_submit()}
 	</button>
 </form>

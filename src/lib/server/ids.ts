@@ -1,0 +1,4 @@
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Route ids are checked before querying, so a bad URL is a 404 rather than a database error. */
+export const isUuid = (value: string) => UUID_PATTERN.test(value);

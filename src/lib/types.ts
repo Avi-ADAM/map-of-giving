@@ -1,4 +1,5 @@
-import type { Category, ListingStatus } from './domain';
+import type { Category, ListingStatus, SpotStatus } from './domain';
+import type { VisitCounts } from './spot-rating';
 
 export type LatLng = { lat: number; lng: number };
 
@@ -12,6 +13,18 @@ export type PublicListing = LatLng & {
 	createdAt: Date;
 	lastConfirmedAt: Date;
 	expiresAt: Date;
+};
+
+/** A hot spot as it is safe to send to the browser, with its recent visit counts. */
+export type PublicSpot = LatLng & {
+	id: string;
+	category: Category;
+	description: string;
+	whenHint: string | null;
+	status: SpotStatus;
+	createdAt: Date;
+	lastFoundAt: Date | null;
+	visits: VisitCounts;
 };
 
 export type MapMarker = LatLng & {

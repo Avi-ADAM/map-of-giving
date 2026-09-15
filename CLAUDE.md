@@ -52,6 +52,9 @@ OpenStreetMap tiles.
   it with a **relative path** because drizzle-kit doesn't understand `$lib`.
 - Business rules (expiry, rate limits, when a listing is hidden) live in
   `src/lib/server/listings.ts`. Validation is pure and unit-tested in `src/lib/listing-validation.ts`.
+- Hot spots (`/spots`, places where free things show up regularly) follow the same split:
+  rules in `src/lib/server/spots.ts`, the "is it worth going" verdict and staleness in
+  `src/lib/spot-rating.ts`, validation in `src/lib/spot-validation.ts`.
 - Internal links: always `href('/path')` from `$lib/i18n` (adds the language prefix + base path).
 - Every new UI string goes into **all five** files in `messages/`. Use `Intl` for dates, distances
   and numbers (`$lib/format.ts`) instead of hand-written plurals.

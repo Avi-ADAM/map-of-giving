@@ -30,7 +30,7 @@ export type NewListingErrors = Partial<
 export type ParseResult =
 	{ ok: true; data: NewListingInput } | { ok: false; errors: NewListingErrors };
 
-function readText(form: FormData, key: string): string {
+export function readText(form: FormData, key: string): string {
 	const value = form.get(key);
 	return typeof value === 'string' ? value.replace(/\s+/g, ' ').trim() : '';
 }

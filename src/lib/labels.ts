@@ -1,6 +1,7 @@
 import { m } from '$lib/paraglide/messages.js';
-import type { Category, ReportKind } from './domain';
+import type { Category, ReportKind, SpotVisitOutcome } from './domain';
 import { DESCRIPTION_MAX, HINT_MAX, type FieldError } from './listing-validation';
+import type { SpotVerdict } from './spot-rating';
 
 const categoryMessages: Record<Category, () => string> = {
 	food: m.category_food,
@@ -18,9 +19,34 @@ const reportMessages: Record<ReportKind, () => string> = {
 	unusable: m.report_unusable
 };
 
+const visitMessages: Record<SpotVisitOutcome, () => string> = {
+	found: m.spot_visit_found,
+	empty: m.spot_visit_empty,
+	unusable: m.spot_visit_unusable,
+	stopped: m.spot_visit_stopped
+};
+
+const verdictMessages: Record<SpotVerdict, () => string> = {
+	often: m.spot_verdict_often,
+	sometimes: m.spot_verdict_sometimes,
+	rarely: m.spot_verdict_rarely,
+	unknown: m.spot_verdict_unknown
+};
+
+export const SPOT_VERDICT_EMOJI: Record<SpotVerdict, string> = {
+	often: '👍',
+	sometimes: '🤞',
+	rarely: '👎',
+	unknown: '❔'
+};
+
 export const categoryLabel = (category: Category) => categoryMessages[category]();
 
 export const reportLabel = (kind: ReportKind) => reportMessages[kind]();
+
+export const visitLabel = (outcome: SpotVisitOutcome) => visitMessages[outcome]();
+
+export const verdictLabel = (verdict: SpotVerdict) => verdictMessages[verdict]();
 
 export function fieldErrorMessage(error: FieldError): string {
 	switch (error) {

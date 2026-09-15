@@ -14,6 +14,8 @@ export function relativeTime(date: Date, now: number): string {
 	return formatter.format(Math.round(diff / ms), unit);
 }
 
+export const formatCount = (value: number) => new Intl.NumberFormat(getLocale()).format(value);
+
 export function formatDistance(meters: number): string {
 	const km = meters >= 1000;
 	return new Intl.NumberFormat(getLocale(), {
